@@ -28,14 +28,15 @@ const Register = () => {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
+    <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
       <form className="bg-white p-6 rounded shadow-md" onSubmit={handleSubmit}>
         <h2 className="text-2xl mb-4">Register</h2>
         <div className="mb-4">
-          <label className="block text-gray-700">Username</label>
+          <label className="block text-gray-700">Email</label>
           <input
             type="text"
             value={username}
+            required
             onChange={(e) => setUsername(e.target.value)}
             className="w-full p-2 border rounded"
           />
@@ -44,6 +45,7 @@ const Register = () => {
           <label className="block text-gray-700">Password</label>
           <input
             type="password"
+            required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full p-2 border rounded"
@@ -53,6 +55,7 @@ const Register = () => {
           Register
         </button>
       </form>
+      <div className=' mt-3'>Already registered? <a className=' text-blue-700 font-medium' href="/login"> Login </a>to continue</div>
     </div>
   );
 };

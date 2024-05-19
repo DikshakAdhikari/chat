@@ -5,14 +5,13 @@ import Register from './components/Register';
 import Chat from './components/Chat';
 
 const App = () => {
-  const [token, setToken] = useState('');
 
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={<Login setToken={setToken} />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/chat" element={<Chat token={token} />} />
+        <Route path="/" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/chat" element={<Chat />} />
       </Routes>
     </Router>
   );
