@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import {useNavigate, userNavigate} from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -23,9 +23,9 @@ const Login = () => {
       <form className="bg-white p-6 rounded shadow-md" onSubmit={handleSubmit}>
         <h2 className="text-2xl mb-4">Login</h2>
         <div className="mb-4">
-          <label className="block text-gray-700">Username</label>
+          <label className="block text-gray-700">Email</label>
           <input
-            type="text"
+            type="email"
             required
             value={username}
             onChange={(e) => setUsername(e.target.value)}

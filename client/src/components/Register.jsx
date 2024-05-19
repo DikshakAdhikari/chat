@@ -19,9 +19,6 @@ const Register = () => {
         throw new Error("Nerwork problems")
       }
       const data= await res.json();
-      console.log(data);
-      // await ('http://localhost:5000/api/auth/register', { username, password });
-      // alert('User registered successfully');
     } catch (error) {
       console.error(error);
     }
@@ -34,7 +31,7 @@ const Register = () => {
         <div className="mb-4">
           <label className="block text-gray-700">Email</label>
           <input
-            type="text"
+            type="email"
             value={username}
             required
             onChange={(e) => setUsername(e.target.value)}

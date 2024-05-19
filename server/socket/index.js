@@ -1,5 +1,6 @@
 const socketIo = require('socket.io');
 const { verifyJWT } = require('../middleware/auth');
+const config= require('../config/config')
 
 const initializeSocket = (serverr) => {
   const io = socketIo(serverr, {
@@ -8,6 +9,8 @@ const initializeSocket = (serverr) => {
       methods: ['GET', 'POST'],
     },
   });
+
+  console.log(config.globalArray.push(2));
 
   io.use((socket, next) => {
     if (socket.handshake.query && socket.handshake.query.toke) {
