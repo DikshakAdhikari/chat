@@ -22,6 +22,7 @@ const Chat = () => {
 
   const sendMessage = async() => {
     if (message) {
+      console.log(message);
       try{
         const res= await fetch(`${BASE_URL}/chat`,{
           method:"POST",
@@ -29,7 +30,7 @@ const Chat = () => {
             'Content-Type':"application/json",
             authorization: localStorage.getItem('token')
           },
-          body:JSON.stringify({message})
+          body:JSON.stringify({message:message})
         });
         if(!res.ok){
           throw new Error("Server error!")
