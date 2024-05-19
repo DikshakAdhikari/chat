@@ -1,10 +1,22 @@
-const jwt = require('jsonwebtoken');
+const jwt= require('jsonwebtoken');
 
-exports.verifyJWT = (token, callback) => {
-  jwt.verify(token, 'your_jwt_secret', (err, decoded) => {
-    if (err) {
-      return callback(err);
+const verifyToken= async(req,res, next)=> {
+    try{
+        const token= req.headers.authorization;
+        if(!token){
+            return  res.json('Invalid/no token!')
+        }
+           jwt.verify(token,"secret", (err, payload)=> {
+            if(err){
+                return res.json("JWT verification failed!")
+            }
+            req.payload= payload;
+            next()
+          }) 
+    }catch(err){
+        console.log('Error while generating token');
     }
-    callback(null, decoded);
-  });
-};
+}
+
+
+module.exports= verifyToken

@@ -31,13 +31,14 @@ router.post('/login', async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
+    console.log(user);
     const payload = {
       user: {
-        id: user.id,
+        id: user._id,
         username: user.username,
       },
     };
-    jwt.sign(payload, 'your_jwt_secret', { expiresIn: '1h' }, (err, token) => {
+    jwt.sign(payload, 'secret', { expiresIn: '1h' }, (err, token) => {
       if (err) throw err;
       res.json({ token });
     });

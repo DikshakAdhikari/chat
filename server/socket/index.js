@@ -1,7 +1,7 @@
 const socketIo = require('socket.io');
 const { verifyJWT } = require('../middleware/auth');
 const config= require('../config/config')
-
+const jwt= require("jsonwebtoken")
 const initializeSocket = (serverr) => {
   const io = socketIo(serverr, {
     cors: {
@@ -12,17 +12,20 @@ const initializeSocket = (serverr) => {
 
   console.log(config.globalArray.push(2));
 
-  io.use((socket, next) => {
-    if (socket.handshake.query && socket.handshake.query.toke) {
-      verifyJWT(socket.handshake.query.toke, (err, decoded) => {
-        if (err) return next(new Error('Authentication error'));
-        socket.user = decoded;
-        next();
-      });
-    } else {
-      next(new Error('Authentication error'));
+  io.use((socket, next)=> {
+    const token=  socket.handshake.query.toke;
+    if(!token){
+        return next(new Error("Authentication error"));
     }
-  }).on('connection', (socket) => {
+    jwt.verify(token, "secret", (err, payload)=> {
+        if(err){
+            return next(new Error("Authentication error"));
+        }
+        socket.user= payload ;
+        next()
+    })
+})
+  io.on('connection', (socket) => {
     console.log('A user connected', socket.user);
 
     socket.on('message', (msg) => {
