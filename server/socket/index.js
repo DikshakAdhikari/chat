@@ -23,7 +23,6 @@ const initializeSocket = (serverr) => {
     console.log('A user connected', socket.user);
 
     socket.on('message', (msg) => {
-      console.log(msg);
       io.emit('message', { user: socket.user.username, text: msg });
     });
 
