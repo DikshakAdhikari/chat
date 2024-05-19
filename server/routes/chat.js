@@ -6,6 +6,7 @@ const chatRouter= express.Router();
 chatRouter.post('/', verifyToken, async(req,res)=> {
     try{
         console.log(req.payload);
+        res.json("Chat saved successfully!")
     }catch(err){
         res.json({message:err})
     }

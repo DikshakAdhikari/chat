@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
+import { BASE_URL } from '../config';
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
@@ -19,9 +20,25 @@ const Chat = () => {
     return () => newSocket.close();
   }, [toke]);
 
-  const sendMessage = () => {
+  const sendMessage = async() => {
     if (message) {
-      console.log(message);
+      try{
+        const res= await fetch(`${BASE_URL}/chat`,{
+          method:"POST",
+          headers:{
+            'Content-Type':"application/json",
+            authorization: localStorage.getItem('token')
+          },
+          body:JSON.stringify({message})
+        });
+        if(!res.ok){
+          throw new Error("Server error!")
+        }
+        const data= await res.json();
+        console.log(data);
+      }catch(err){
+        console.log(err);
+      }
       socket.emit('message', message);
       setMessage('');
     }

@@ -27,7 +27,6 @@ const initializeSocket = (serverr) => {
 })
   io.on('connection', (socket) => {
     console.log('A user connected', socket.user);
-
     socket.on('message', (msg) => {
       io.emit('message', { user: socket.user.username, text: msg });
     });
