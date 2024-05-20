@@ -11,7 +11,9 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:5000/api/auth/login', { username, password });
+      console.log(response);
       localStorage.setItem("token",response.data.token)
+      localStorage.setItem("username",response.data.username)
       navigate('/chat')
     } catch (error) {
       console.error(error);

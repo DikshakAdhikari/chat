@@ -38,9 +38,9 @@ router.post('/login', async (req, res) => {
         username: user.username,
       },
     };
-    jwt.sign(payload, 'secret', { expiresIn: '1h' }, (err, token) => {
+    jwt.sign(payload, 'secret', { expiresIn: '4h' }, (err, token) => {
       if (err) throw err;
-      res.json({ token });
+      res.json({ token, username:user.username });
     });
   } catch (error) {
     res.status(500).json({ message: 'Server error' });

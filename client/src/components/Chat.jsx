@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import io from 'socket.io-client';
 import { BASE_URL } from '../config';
 import Navbar from './Navbar';
@@ -8,6 +8,8 @@ const Chat = () => {
   const [message, setMessage] = useState('');
   const [socket, setSocket] = useState(null);
   const token = localStorage.getItem("token");
+
+  const chatEndRef = useRef(null);
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -23,7 +25,6 @@ const Chat = () => {
           throw new Error("Server Error!");
         }
         const data = await res.json();
-        console.log(data);
         setMessages(data);
       } catch (err) {
         console.log(err);
@@ -46,7 +47,6 @@ const Chat = () => {
   }, [token]);
 
   const sendMessage = async () => {
-    //console.log(message);
     if (message) {
       try {
         const res = await fetch(`${BASE_URL}/chat`, {
