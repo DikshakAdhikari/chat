@@ -26,14 +26,14 @@ Install dependencies
   npm install
 ```
 
-Start the React server  
+Start the React server locally
 
 ```bash
   cd client
   npm run dev
 ```
 
-Start the Node.js server  
+Start the Node.js server locally 
 
 ```bash
   cd server
