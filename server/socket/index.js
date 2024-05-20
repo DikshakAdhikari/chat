@@ -1,6 +1,5 @@
 const socketIo = require('socket.io');
 const { verifyJWT } = require('../middleware/auth');
-const config= require('../config/config')
 const jwt= require("jsonwebtoken")
 const initializeSocket = (serverr) => {
   const io = socketIo(serverr, {
@@ -10,7 +9,6 @@ const initializeSocket = (serverr) => {
     },
   });
 
-  console.log(config.globalArray.push(2));
 
   io.use((socket, next)=> {
     const token=  socket.handshake.query.toke;
@@ -26,7 +24,7 @@ const initializeSocket = (serverr) => {
     })
 })
   io.on('connection', (socket) => {
-    console.log('A user connected', socket.user);
+    // console.log('A user connected', socket.user);
     socket.on('message', (msg) => {
       io.emit('message', { user: socket.user.username, text: msg });
     });

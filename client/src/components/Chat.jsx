@@ -46,12 +46,13 @@ const Chat = () => {
     setSocket(newSocket);
     newSocket.on("connection", () => console.log('connection made'));
     newSocket.on('message', (msg) => {
-      setMessages((prevMessages) => [...prevMessages, {chat:msg.text ,  senderId:{username:"dikshak"}}]);
+      setMessages((prevMessages) => [...prevMessages, {chat:msg.text ,  senderId:{username:localStorage.getItem("username")}}]);
     });
     return () => newSocket.close();
   }, [token]);
 
-  const sendMessage = async () => {
+  const sendMessage = async (e) => {
+    e.preventDefault();
     if (message) {
       try {
         const res = await fetch(`${BASE_URL}/chat`, {
@@ -66,7 +67,6 @@ const Chat = () => {
           throw new Error("Server error!");
         }
         const data = await res.json();
-        console.log(data);
       } catch (err) {
         console.log(err);
       }
@@ -88,21 +88,21 @@ const Chat = () => {
         <form onSubmit={sendMessage} className="w-full max-w-4xl mt-16 bg-white p-4 rounded shadow-md mb-4">
           <div className="h-[70vh] overflow-y-scroll mb-4">
             {messages?.map((msg, index) => (
-              <div key={index} className="mb-2">
+              <div key={index} className="mb-4">
                 {msg?.senderId?.username !== localStorage.getItem("username") ? (
-                  <div className="flex flex-col gap-2">
-                    <div className="text-lg flex flex-col gap-2 bg-blue-100 w-96 py-3 px-5 rounded-2xl text-gray-900 break-words">
-                      <div className="text-base">{msg.chat}</div>
+                  <div className="flex flex-col gap-1">
+                    <div className="text-lg flex flex-col gap-2 bg-blue-300 w-96 py-3 px-5 rounded-2xl text-gray-900 break-words">
+                      <div className="text-base font-medium">{msg.chat}</div>
                     </div>
-                    <div className="text-sm ml-2">{msg?.senderId?.username}</div>
+                    <div className="text-sm  italic text-gray-800  ml-2">{msg?.senderId?.username}</div>
                   </div>
                 ) : (
                   <div className="flex justify-end">
-                    <div className="flex flex-col gap-2">
-                      <div className="bg-lime-200 text-lg w-96 px-5 py-3 rounded-2xl text-gray-900 break-words">
-                        <div className="text-base">{msg.chat}</div>
+                    <div className="flex flex-col gap-1">
+                      <div className="bg-lime-300 text-lg w-96 px-5 py-3 rounded-2xl text-gray-900 break-words">
+                        <div className="text-base font-medium">{msg.chat}</div>
                       </div>
-                      <div className="flex justify-end mr-2 text-sm">
+                      <div className="flex justify-end mr-2 italic text-gray-800 text-sm">
                         {msg?.senderId?.username}
                       </div>
                     </div>
