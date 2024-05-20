@@ -11,6 +11,11 @@ const Chat = () => {
 
   const chatEndRef = useRef(null);
 
+  const scrollToBottom = () => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+
   useEffect(() => {
     const fetchMessages = async () => {
       try {
@@ -66,10 +71,14 @@ const Chat = () => {
         console.log(err);
       }
       socket.emit('message', message);
-      setMessages([...messages, { chat: message, senderId: { username: "rrr" } }]);
+      setMessages([...messages, { chat: message, senderId: { username: localStorage.getItem("username") } }]);
       setMessage('');
     }
   };
+
+  useEffect(() => {
+    scrollToBottom();
+  },[messages]);
 
   
   return (
@@ -83,6 +92,7 @@ const Chat = () => {
               <strong>{msg?.senderId?.username}: </strong>{msg.chat}
             </div>
           ))}
+        <div ref={chatEndRef} />
         </div>
         <input
           type="text"
