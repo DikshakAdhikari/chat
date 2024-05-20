@@ -16,6 +16,16 @@ chatRouter.post('/', verifyToken, async(req,res)=> {
     }catch(err){
         res.json({message:err})
     }
+});
+
+chatRouter.get('/', verifyToken, async (req,res)=> {
+    try{
+        const allChats= await CHAT.find().populate("senderId")
+        console.log(allChats);
+        res.status(200).json(allChats);
+    }catch(err){
+        res.json({message:err})
+    }
 })
 
 module.exports= chatRouter

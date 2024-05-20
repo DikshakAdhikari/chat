@@ -7,7 +7,32 @@ const Chat = () => {
   const [message, setMessage] = useState('');
   const [socket, setSocket] = useState(null);
   const toke=localStorage.getItem("token")
-// console.log(toke);
+
+  useEffect(()=> {
+    const fun= async()=> {
+      try{
+        const res= await fetch(`${BASE_URL}/chat`,{
+          method:"GET",
+          headers:{
+            "Content-Type":"application/json",
+            authorization: localStorage.getItem("token")
+          }
+        });
+        if(!res.ok){
+          throw new Error("Server Error!")
+        }
+        const data= await res.json()
+        console.log(data);
+      }catch(err){
+        console.log(err);
+      }
+    }
+
+    fun()
+    
+  },[])
+
+
   useEffect(() => {
     const newSocket = io('http://localhost:5000', {
       query: { toke },
@@ -44,6 +69,7 @@ const Chat = () => {
       setMessage('');
     }
   };
+
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100">

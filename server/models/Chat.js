@@ -1,3 +1,4 @@
+const { Schema } = require('mongoose');
 const mongoose= require('mongoose')
 
 const ChatSchema= new mongoose.Schema({
@@ -6,8 +7,8 @@ const ChatSchema= new mongoose.Schema({
             required:true
     },
     senderId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "user",
+        type: Schema.Types.ObjectId,
+        ref: "User",
         required: true,
     }
 },{timestamps:true});
