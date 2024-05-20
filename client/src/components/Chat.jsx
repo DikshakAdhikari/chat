@@ -6,7 +6,7 @@ import Navbar from './Navbar';
 const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState('');
-  const [socket, setSocket] = useState(null);
+  const socket= useRef()
   const token = localStorage.getItem("token");
 
   const chatEndRef = useRef(null);
@@ -16,20 +16,20 @@ const Chat = () => {
   };
 
   useEffect(() => {
-    const newSocket = io('http://localhost:5000', {
+    socket.current= io('http://localhost:5000', {
       query: { toke:localStorage.getItem("token") },
     });
-    setSocket(newSocket);
-    newSocket.on("connection", () => console.log('connection made'));
-    newSocket.on('message', (msg) => {
+    socket.current.on("connection", () => console.log('connection made'));
+    socket.current.on('message', (msg) => {
       console.log(msg);
       setMessages((prevMessages) => [...prevMessages, {chat:msg.text ,  senderId:{username:msg.user}}]);
     });
-    return () => newSocket.close();
-  }, [socket]);
+    return () => socket.current.close();
+  }, [socket.current]);
 
 
   useEffect(() => {
+   
     const fetchMessages = async () => {
       try {
         const res = await fetch(`${BASE_URL}/chat`, {
@@ -50,7 +50,8 @@ const Chat = () => {
     }
 
     fetchMessages();
-  }, [socket]);
+  
+  }, [socket.current]);
 
 
 
@@ -74,7 +75,7 @@ const Chat = () => {
         console.log(err);
       }
       setMessages([...messages, { chat: message, senderId: { username: localStorage.getItem("username") } }]);
-      socket.emit('message', message);
+      socket.current.emit('message', message);
       setMessage('');
     }
   };
@@ -83,7 +84,7 @@ const Chat = () => {
     scrollToBottom();
   },[messages]);
 
-  // console.log(messages);
+   console.log(messages);
   return (
     <div>
       <Navbar />
@@ -95,7 +96,6 @@ const Chat = () => {
                 {msg?.senderId?.username !== localStorage.getItem("username") ? (
                   <div className="flex flex-col gap-1">
                     <div className="text-lg flex flex-col gap-2 bg-blue-300 w-96 py-3 px-5 rounded-2xl text-gray-900 break-words">
-                      {console.log(msg?.senderId?.username , "ding dong")}
                       <div className="text-base font-medium">{msg.chat}</div>
                     </div>
                     <div className="text-sm  italic text-gray-800  ml-2">{msg?.senderId?.username}</div>
@@ -107,15 +107,14 @@ const Chat = () => {
                         <div className="text-base font-medium">{msg.chat}</div>
                       </div>
                       <div className="flex justify-end mr-2 italic text-gray-800 text-sm">
-                        {console.log(msg?.senderId?.username)}
                         {msg?.senderId?.username}
                       </div>
                     </div>
                   </div>
                 )}
+                <div ref={chatEndRef} />
               </div>
             ))}
-            <div ref={chatEndRef} />
           </div>
           <input
             type="text"

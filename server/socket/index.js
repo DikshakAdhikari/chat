@@ -17,7 +17,7 @@ const initializeSocket = (serverr) => {
     if(!token){
         return next(new Error("Authentication error"));
     }
-    jwt.verify(token, "secret", (err, payload)=> {
+    jwt.verify(token, process.env.JWT_SECRET_KEY , (err, payload)=> {
         if(err){
             return next(new Error("Authentication error"));
         }
