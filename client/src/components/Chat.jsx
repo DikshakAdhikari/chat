@@ -15,6 +15,19 @@ const Chat = () => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  useEffect(() => {
+    const newSocket = io('http://localhost:5000', {
+      query: { toke:localStorage.getItem("token") },
+    });
+    setSocket(newSocket);
+    newSocket.on("connection", () => console.log('connection made'));
+    newSocket.on('message', (msg) => {
+      console.log(msg);
+      setMessages((prevMessages) => [...prevMessages, {chat:msg.text ,  senderId:{username:msg.user}}]);
+    });
+    return () => newSocket.close();
+  }, [socket]);
+
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -37,19 +50,9 @@ const Chat = () => {
     }
 
     fetchMessages();
-  }, [token]);
+  }, [socket]);
 
-  useEffect(() => {
-    const newSocket = io('http://localhost:5000', {
-      query: { toke:localStorage.getItem("token") },
-    });
-    setSocket(newSocket);
-    newSocket.on("connection", () => console.log('connection made'));
-    newSocket.on('message', (msg) => {
-      setMessages((prevMessages) => [...prevMessages, {chat:msg.text ,  senderId:{username:localStorage.getItem("username")}}]);
-    });
-    return () => newSocket.close();
-  }, [token]);
+
 
   const sendMessage = async (e) => {
     e.preventDefault();
@@ -70,8 +73,8 @@ const Chat = () => {
       } catch (err) {
         console.log(err);
       }
-      socket.emit('message', message);
       setMessages([...messages, { chat: message, senderId: { username: localStorage.getItem("username") } }]);
+      socket.emit('message', message);
       setMessage('');
     }
   };
@@ -80,7 +83,7 @@ const Chat = () => {
     scrollToBottom();
   },[messages]);
 
-  
+  // console.log(messages);
   return (
     <div>
       <Navbar />
@@ -92,6 +95,7 @@ const Chat = () => {
                 {msg?.senderId?.username !== localStorage.getItem("username") ? (
                   <div className="flex flex-col gap-1">
                     <div className="text-lg flex flex-col gap-2 bg-blue-300 w-96 py-3 px-5 rounded-2xl text-gray-900 break-words">
+                      {console.log(msg?.senderId?.username , "ding dong")}
                       <div className="text-base font-medium">{msg.chat}</div>
                     </div>
                     <div className="text-sm  italic text-gray-800  ml-2">{msg?.senderId?.username}</div>
@@ -103,6 +107,7 @@ const Chat = () => {
                         <div className="text-base font-medium">{msg.chat}</div>
                       </div>
                       <div className="flex justify-end mr-2 italic text-gray-800 text-sm">
+                        {console.log(msg?.senderId?.username)}
                         {msg?.senderId?.username}
                       </div>
                     </div>

@@ -21,6 +21,7 @@ chatRouter.post('/', verifyToken, async(req,res)=> {
 chatRouter.get('/', verifyToken, async (req,res)=> {
     try{
         const allChats= await CHAT.find().populate("senderId")
+        
         res.status(200).json(allChats);
     }catch(err){
         res.json({message:err})
