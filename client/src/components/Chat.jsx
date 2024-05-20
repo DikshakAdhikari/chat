@@ -84,28 +84,46 @@ const Chat = () => {
   return (
     <div>
       <Navbar />
-    <div className="flex flex-col items-center justify-center h-[85vh] bg-gray-100">
-      <form onSubmit={sendMessage} className="w-full max-w-4xl mt-16 bg-white p-4 rounded shadow-md mb-4">
-        <div className=" h-[70vh] overflow-y-scroll mb-4">
-          {messages?.map((msg, index) => (
-            <div key={index} className="mb-2">
-              <strong>{msg?.senderId?.username}: </strong>{msg.chat}
-            </div>
-          ))}
-        <div ref={chatEndRef} />
-        </div>
-        <input
-          type="text"
-          required
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          className="w-full outline-none border-gray-800  border-solid p-2 border rounded mb-2"
-        />
-        <button  type='submit' className="w-full  bg-blue-500 text-white py-2 rounded">
-          Send
-        </button>
-      </form>
-    </div>
+      <div className="flex flex-col items-center justify-center h-[85vh] bg-gray-100">
+        <form onSubmit={sendMessage} className="w-full max-w-4xl mt-16 bg-white p-4 rounded shadow-md mb-4">
+          <div className="h-[70vh] overflow-y-scroll mb-4">
+            {messages?.map((msg, index) => (
+              <div key={index} className="mb-2">
+                {msg?.senderId?.username !== localStorage.getItem("username") ? (
+                  <div className="flex flex-col gap-2">
+                    <div className="text-lg flex flex-col gap-2 bg-blue-100 w-96 py-3 px-5 rounded-2xl text-gray-900 break-words">
+                      <div className="text-base">{msg.chat}</div>
+                    </div>
+                    <div className="text-sm ml-2">{msg?.senderId?.username}</div>
+                  </div>
+                ) : (
+                  <div className="flex justify-end">
+                    <div className="flex flex-col gap-2">
+                      <div className="bg-lime-200 text-lg w-96 px-5 py-3 rounded-2xl text-gray-900 break-words">
+                        <div className="text-base">{msg.chat}</div>
+                      </div>
+                      <div className="flex justify-end mr-2 text-sm">
+                        {msg?.senderId?.username}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+            <div ref={chatEndRef} />
+          </div>
+          <input
+            type="text"
+            required
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            className="w-full outline-none border-gray-800 border-solid p-2 border rounded mb-2"
+          />
+          <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded">
+            Send
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
